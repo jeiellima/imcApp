@@ -26,13 +26,15 @@ class ViewController: UIViewController {
         title1.textAlignment = .center
         title1.text = "Cálculo do IMC"
         title1.textColor = .white
+        title1.font = UIFont.boldSystemFont(ofSize: 35)
         view.addSubview(title1)
-        
+         
         subtitle = UILabel()
         subtitle.translatesAutoresizingMaskIntoConstraints = false
         subtitle.textAlignment = .center
         subtitle.text = "Descubra o seu Índice de Massa Corpórea"
         subtitle.textColor = .white
+        subtitle.font = UIFont.boldSystemFont(ofSize: 18)
         view.addSubview(subtitle)
         
         pesoLabel = UILabel()
@@ -54,6 +56,9 @@ class ViewController: UIViewController {
         pesoTextField.textAlignment = .center
         pesoTextField.placeholder = "Ex.: 99"
         pesoTextField.textColor = .white
+        pesoTextField.backgroundColor = .white
+        pesoTextField.layer.cornerRadius = 5
+
         view.addSubview(pesoTextField)
         
         alturaTextField = UITextField()
@@ -61,6 +66,8 @@ class ViewController: UIViewController {
         alturaTextField.textAlignment = .center
         alturaTextField.placeholder = "Ex.: 1.99"
         alturaTextField.textColor = .white
+        alturaTextField.backgroundColor = .white
+        alturaTextField.layer.cornerRadius = 5
         view.addSubview(alturaTextField)
         
         calcButton = UIButton()
@@ -68,11 +75,25 @@ class ViewController: UIViewController {
         calcButton.setTitle("Calcular", for: .normal)
         
         NSLayoutConstraint.activate([
-            title1.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
+            title1.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 35),
             title1.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor),
             
-            subtitle.topAnchor.constraint(equalTo: title1.layoutMarginsGuide.bottomAnchor),
-            subtitle.centerXAnchor.constraint(equalTo: title1.layoutMarginsGuide.centerXAnchor)
+            subtitle.topAnchor.constraint(equalTo: title1.layoutMarginsGuide.bottomAnchor, constant: 25),
+            subtitle.centerXAnchor.constraint(equalTo: title1.layoutMarginsGuide.centerXAnchor),
+            
+            pesoLabel.topAnchor.constraint(equalTo: subtitle.layoutMarginsGuide.bottomAnchor, constant: 30),
+            pesoLabel.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor, constant: 30),
+            
+            pesoTextField.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor, multiplier: 0.2),
+            pesoTextField.topAnchor.constraint(equalTo: pesoLabel.layoutMarginsGuide.bottomAnchor, constant: 25),
+            pesoTextField.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor, constant: 30),
+            
+            alturaLabel.topAnchor.constraint(equalTo: subtitle.layoutMarginsGuide.bottomAnchor, constant: 30),
+            alturaLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: -30),
+            
+            alturaTextField.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor, multiplier: 0.2),
+            alturaTextField.topAnchor.constraint(equalTo: alturaLabel.layoutMarginsGuide.bottomAnchor, constant: 25),
+            alturaTextField.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: -30),
         ])
     }
     
@@ -83,6 +104,8 @@ class ViewController: UIViewController {
     }
 
 }
+
+
 
 #if canImport(SwiftUI) && DEBUG
 import SwiftUI
@@ -111,7 +134,7 @@ let deviceNames: [String] = [
     "iPhone 11 Pro Max",
 ]
 
-@available(iOS 14.0, *)
+@available(iOS 13.0, *)
 struct ViewController_Preview: PreviewProvider {
   static var previews: some View {
     ForEach(deviceNames, id: \.self) { deviceName in
