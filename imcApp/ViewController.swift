@@ -17,6 +17,8 @@ class ViewController: UIViewController {
     var alturaTextField: UITextField!
     var calcButton: UIButton!
     
+    var textLabel: UILabel!
+    
     override func loadView() {
         view = UIView()
         view.backgroundColor = UIColor(red: 22.0/255.0, green: 180.0/255.0, blue: 198.0/255.0, alpha: 1)
@@ -55,6 +57,7 @@ class ViewController: UIViewController {
         pesoTextField.translatesAutoresizingMaskIntoConstraints = false
         pesoTextField.textAlignment = .center
         pesoTextField.placeholder = "Ex.: 99"
+        pesoTextField.isUserInteractionEnabled = false
         pesoTextField.textColor = .white
         pesoTextField.backgroundColor = .white
         pesoTextField.layer.cornerRadius = 5
@@ -65,6 +68,7 @@ class ViewController: UIViewController {
         alturaTextField.translatesAutoresizingMaskIntoConstraints = false
         alturaTextField.textAlignment = .center
         alturaTextField.placeholder = "Ex.: 1.99"
+        alturaTextField.isUserInteractionEnabled = false
         alturaTextField.textColor = .white
         alturaTextField.backgroundColor = .white
         alturaTextField.layer.cornerRadius = 5
@@ -73,6 +77,21 @@ class ViewController: UIViewController {
         calcButton = UIButton()
         calcButton.translatesAutoresizingMaskIntoConstraints = false
         calcButton.setTitle("Calcular", for: .normal)
+        calcButton.setTitleColor(.white, for: .normal)
+        calcButton.backgroundColor = UIColor(red: 10.0/255.0, green: 140.0/255.0, blue: 160.0/255.0, alpha: 1)
+        calcButton.layer.cornerRadius = 5
+        view.addSubview(calcButton)
+        
+        let screenSize: CGRect = UIScreen.main.bounds
+        let myView = UIView(frame: CGRect(x: 0, y: 320, width: screenSize.width, height: screenSize.height))
+        myView.backgroundColor = .white
+        self.view.addSubview(myView)
+        
+        textLabel = UILabel()
+        textLabel.text = "Seu índice de Massa Corpórea é"
+        textLabel.textColor = .systemGray
+        view.addSubview(textLabel)
+        
         
         NSLayoutConstraint.activate([
             title1.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 35),
@@ -84,16 +103,26 @@ class ViewController: UIViewController {
             pesoLabel.topAnchor.constraint(equalTo: subtitle.layoutMarginsGuide.bottomAnchor, constant: 30),
             pesoLabel.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor, constant: 30),
             
-            pesoTextField.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor, multiplier: 0.2),
+            pesoTextField.heightAnchor.constraint(equalToConstant: 30),
+            pesoTextField.widthAnchor.constraint(equalToConstant: 80),
             pesoTextField.topAnchor.constraint(equalTo: pesoLabel.layoutMarginsGuide.bottomAnchor, constant: 25),
             pesoTextField.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor, constant: 30),
             
             alturaLabel.topAnchor.constraint(equalTo: subtitle.layoutMarginsGuide.bottomAnchor, constant: 30),
             alturaLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: -30),
             
-            alturaTextField.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor, multiplier: 0.2),
+            alturaTextField.heightAnchor.constraint(equalToConstant: 30),
+            alturaTextField.widthAnchor.constraint(equalToConstant: 80),
             alturaTextField.topAnchor.constraint(equalTo: alturaLabel.layoutMarginsGuide.bottomAnchor, constant: 25),
             alturaTextField.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: -30),
+            
+            calcButton.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor, multiplier: 0.65),
+            calcButton.heightAnchor.constraint(equalToConstant: 60),
+            calcButton.topAnchor.constraint(equalTo: alturaTextField.layoutMarginsGuide.bottomAnchor, constant: 40),
+            calcButton.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor),
+            
+            textLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor)
+            
         ])
     }
     
