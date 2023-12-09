@@ -16,8 +16,17 @@ class ViewController: UIViewController {
     var pesoTextField: UITextField!
     var alturaTextField: UITextField!
     var calcButton: UIButton!
-    
+    var imc = 0.0
+    //MARK: - SeconView
     var textLabel: UILabel!
+    var resultLabel: UILabel!
+    var resultImageView: UIImageView!
+    
+
+    let screenSize: CGRect = UIScreen.main.bounds
+    lazy var secondView: UIView = {
+        UIView(frame: CGRect(x: 0, y: 320, width: screenSize.width, height: screenSize.height))
+    }()
     
     override func loadView() {
         view = UIView()
@@ -61,7 +70,6 @@ class ViewController: UIViewController {
         pesoTextField.textColor = .white
         pesoTextField.backgroundColor = .white
         pesoTextField.layer.cornerRadius = 5
-
         view.addSubview(pesoTextField)
         
         alturaTextField = UITextField()
@@ -82,22 +90,49 @@ class ViewController: UIViewController {
         calcButton.layer.cornerRadius = 5
         view.addSubview(calcButton)
         
-        let screenSize: CGRect = UIScreen.main.bounds
-        let myView = UIView(frame: CGRect(x: 0, y: 320, width: screenSize.width, height: screenSize.height))
-        myView.backgroundColor = .white
-        self.view.addSubview(myView)
+        func calculate() {
+            if let altura = Double(alturaTextField.text!), let peso = Double(pesoTextField.text!) {
+                let altura = altura
+                let peso = peso
+                
+                imc = peso / (altura * altura)
+            }
+        }
+        
+       //MARK: - SecondView
+        secondView.backgroundColor = .white
+        secondView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(secondView)
         
         textLabel = UILabel()
+        textLabel.translatesAutoresizingMaskIntoConstraints = false
         textLabel.text = "Seu índice de Massa Corpórea é"
-        textLabel.textColor = .systemGray
-        view.addSubview(textLabel)
+        textLabel.textAlignment = .center
+        textLabel.textColor = .black
+        textLabel.font = UIFont.systemFont(ofSize: 20)
+        secondView.addSubview(textLabel)
         
+        resultLabel = UILabel()
+        resultLabel.translatesAutoresizingMaskIntoConstraints = false
+        resultLabel.text = "Label"
+        resultLabel.textColor = .black
+        resultLabel.font = UIFont.boldSystemFont(ofSize: 35)
+        secondView.addSubview(resultLabel)
         
+        resultImageView = UIImageView()
+        resultImageView.translatesAutoresizingMaskIntoConstraints = false
+        resultImageView.backgroundColor = UIColor(red: 10.0/255.0, green: 140.0/255.0, blue: 160.0/255.0, alpha: 1)
+        resultImageView.layer.cornerRadius = 10
+        resultImageView.contentMode = .scaleAspectFit
+        secondView.addSubview(resultImageView)
+
+        //MARK: - Constrains
         NSLayoutConstraint.activate([
+            
             title1.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 35),
             title1.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor),
             
-            subtitle.topAnchor.constraint(equalTo: title1.layoutMarginsGuide.bottomAnchor, constant: 25),
+            subtitle.topAnchor.constraint(equalTo: title1.layoutMarginsGuide.bottomAnchor, constant: 20),
             subtitle.centerXAnchor.constraint(equalTo: title1.layoutMarginsGuide.centerXAnchor),
             
             pesoLabel.topAnchor.constraint(equalTo: subtitle.layoutMarginsGuide.bottomAnchor, constant: 30),
@@ -121,8 +156,22 @@ class ViewController: UIViewController {
             calcButton.topAnchor.constraint(equalTo: alturaTextField.layoutMarginsGuide.bottomAnchor, constant: 40),
             calcButton.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor),
             
-            textLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor)
+            secondView.topAnchor.constraint(equalTo: calcButton.bottomAnchor, constant: 15),
+            secondView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            secondView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            secondView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
+            textLabel.centerXAnchor.constraint(equalTo: secondView.centerXAnchor),
+            textLabel.topAnchor.constraint(equalTo: secondView.layoutMarginsGuide.topAnchor, constant: 15),
+            
+            resultLabel.centerXAnchor.constraint(equalTo: secondView.centerXAnchor),
+            resultLabel.topAnchor.constraint(equalTo: textLabel.layoutMarginsGuide.bottomAnchor, constant: 10),
+            
+            resultImageView.widthAnchor.constraint(equalToConstant: 350),
+            resultImageView.heightAnchor.constraint(equalToConstant: 350),
+            resultImageView.centerXAnchor.constraint(equalTo: secondView.centerXAnchor),
+            resultImageView.topAnchor.constraint(equalTo: resultLabel.layoutMarginsGuide.bottomAnchor, constant: 25)
+
         ])
     }
     
