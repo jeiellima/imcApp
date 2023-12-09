@@ -86,19 +86,13 @@ class ViewController: UIViewController {
         calcButton.translatesAutoresizingMaskIntoConstraints = false
         calcButton.setTitle("Calcular", for: .normal)
         calcButton.setTitleColor(.white, for: .normal)
+        calcButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+        calcButton.tag = 1
         calcButton.backgroundColor = UIColor(red: 10.0/255.0, green: 140.0/255.0, blue: 160.0/255.0, alpha: 1)
         calcButton.layer.cornerRadius = 5
         view.addSubview(calcButton)
-        
-        func calculate() {
-            if let altura = Double(alturaTextField.text!), let peso = Double(pesoTextField.text!) {
-                let altura = altura
-                let peso = peso
-                
-                imc = peso / (altura * altura)
-            }
-        }
-        
+
+
        //MARK: - SecondView
         secondView.backgroundColor = .white
         secondView.translatesAutoresizingMaskIntoConstraints = false
@@ -174,6 +168,16 @@ class ViewController: UIViewController {
 
         ])
     }
+    
+    
+    @objc func buttonAction(sender: UIButton!) {
+            let btnsendtag: UIButton = sender
+            if btnsendtag.tag == 1 {
+
+                dismiss(animated: true, completion: nil)
+                print("button clicked")
+            }
+        }
     
     override func viewDidLoad() {
         super.viewDidLoad()
