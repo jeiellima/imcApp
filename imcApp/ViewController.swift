@@ -66,8 +66,8 @@ class ViewController: UIViewController {
         pesoTextField.translatesAutoresizingMaskIntoConstraints = false
         pesoTextField.textAlignment = .center
         pesoTextField.placeholder = "Ex.: 99"
-        pesoTextField.isUserInteractionEnabled = false
-        pesoTextField.textColor = .white
+        pesoTextField.isUserInteractionEnabled = true
+        pesoTextField.textColor = UIColor(red: 9.0/255.0, green: 140.0/255.0, blue: 160.0/255.0, alpha: 1)
         pesoTextField.backgroundColor = .white
         pesoTextField.layer.cornerRadius = 5
         view.addSubview(pesoTextField)
@@ -76,8 +76,8 @@ class ViewController: UIViewController {
         alturaTextField.translatesAutoresizingMaskIntoConstraints = false
         alturaTextField.textAlignment = .center
         alturaTextField.placeholder = "Ex.: 1.99"
-        alturaTextField.isUserInteractionEnabled = false
-        alturaTextField.textColor = .white
+        alturaTextField.isUserInteractionEnabled = true
+        alturaTextField.textColor = UIColor(red: 9.0/255.0, green: 140.0/255.0, blue: 160.0/255.0, alpha: 1)
         alturaTextField.backgroundColor = .white
         alturaTextField.layer.cornerRadius = 5
         view.addSubview(alturaTextField)
@@ -97,28 +97,33 @@ class ViewController: UIViewController {
         secondView.backgroundColor = .white
         secondView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(secondView)
+        secondView.isHidden = true
+        
         
         textLabel = UILabel()
         textLabel.translatesAutoresizingMaskIntoConstraints = false
         textLabel.text = "Seu índice de Massa Corpórea é"
         textLabel.textAlignment = .center
-        textLabel.textColor = .black
+        textLabel.textColor = UIColor(red: 10.0/255.0, green: 85.0/255.0, blue: 93.0/255.0, alpha: 1)
         textLabel.font = UIFont.systemFont(ofSize: 20)
         secondView.addSubview(textLabel)
         
         resultLabel = UILabel()
         resultLabel.translatesAutoresizingMaskIntoConstraints = false
         resultLabel.text = "Label"
-        resultLabel.textColor = .black
+        resultLabel.textColor = UIColor(red: 10.0/255.0, green: 85.0/255.0, blue: 93.0/255.0, alpha: 1)
         resultLabel.font = UIFont.boldSystemFont(ofSize: 35)
         secondView.addSubview(resultLabel)
         
         resultImageView = UIImageView()
         resultImageView.translatesAutoresizingMaskIntoConstraints = false
-        resultImageView.backgroundColor = UIColor(red: 10.0/255.0, green: 140.0/255.0, blue: 160.0/255.0, alpha: 1)
+        resultImageView.backgroundColor = UIColor(red: 136.0/255.0, green: 255.0/255.0, blue: 251.0/255.0, alpha: 1)
         resultImageView.layer.cornerRadius = 10
         resultImageView.contentMode = .scaleAspectFit
         secondView.addSubview(resultImageView)
+        
+        
+        
 
         //MARK: - Constrains
         NSLayoutConstraint.activate([
@@ -173,11 +178,41 @@ class ViewController: UIViewController {
     @objc func buttonAction(sender: UIButton!) {
             let btnsendtag: UIButton = sender
             if btnsendtag.tag == 1 {
-
+                if let altura = Double(alturaTextField.text!), let peso = Double(pesoTextField.text!) {
+                    imc = peso / (altura * altura)
+                    
+                    showResult()
+                }
                 dismiss(animated: true, completion: nil)
                 print("button clicked")
             }
         }
+    
+    func showResult() {
+        let roundImc = String(format: "%.1f", imc)
+        var result = ""
+        var image = ""
+        switch imc {
+            case 0..<16:
+                result = "\(roundImc) - Magreza"
+                image = "abaixo"
+            case 16..<18.5:
+                result = "\(roundImc) - Abaixo do peso"
+                image = "abaixo"
+            case 18.5..<25:
+                result = "\(roundImc) - Peso ideal"
+                image = "ideal"
+            case 25..<30:
+                result = "\(roundImc) - Sobrepeso"
+                image = "sobre"
+            default:
+                result = "\(roundImc) - Obesidade"
+                image = "obesidade"
+        }
+        resultLabel.text = result
+        resultImageView.image = UIImage(named: image)
+        secondView.isHidden = false
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
