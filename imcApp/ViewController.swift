@@ -16,20 +16,66 @@ class ViewController: UIViewController {
     var pesoTextField: UITextField!
     var alturaTextField: UITextField!
     var calcButton: UIButton!
-    var imc = 0.0
-    //MARK: - SeconView
-    var textLabel: UILabel!
-    var resultLabel: UILabel!
-    var resultImageView: UIImageView!
+
     
+    //MARK: - SeconView
+    var imc = 0.0
 
     let screenSize: CGRect = UIScreen.main.bounds
-    lazy var secondView: UIView = {
-        UIView(frame: CGRect(x: 0, y: 320, width: screenSize.width, height: screenSize.height))
+    lazy var resultView: IMCResultView = {
+        let frame = CGRect(x: 0, y: 320, width: screenSize.width, height: screenSize.height)
+        let resultView = IMCResultView(frame: frame)
+        resultView.backgroundColor = .white
+        resultView.translatesAutoresizingMaskIntoConstraints = false
+        resultView.isHidden = true
+        return resultView
     }()
     
-    override func loadView() {
-        view = UIView()
+    @objc func buttonAction(sender: UIButton!) {
+        let btnsendtag: UIButton = sender
+        if btnsendtag.tag == 1 {
+            if let altura = Double(alturaTextField.text!), let peso = Double(pesoTextField.text!) {
+                imc = peso / (altura * altura)
+                showResult()
+            }
+            dismiss(animated: true, completion: nil)
+            print("button clicked")
+        }
+    }
+    
+    func showResult() {
+        let roundImc = String(format: "%.1f", imc)
+        var result: String
+        var image: String
+        switch imc {
+            case 0..<16:
+                result = "\(roundImc) - Magreza"
+                image = "abaixo"
+            case 16..<18.5:
+                result = "\(roundImc) - Abaixo do peso"
+                image = "abaixo"
+            case 18.5..<25:
+                result = "\(roundImc) - Peso ideal"
+                image = "ideal"
+            case 25..<30:
+                result = "\(roundImc) - Sobrepeso"
+                image = "sobre"
+            default:
+                result = "\(roundImc) - Obesidade"
+                image = "obesidade"
+        }
+        
+        resultView.update(resultText: result, resultImage: UIImage(named: image))
+        resultView.isHidden = false
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupViewHierarchy()
+        setupConstraints()
+    }
+    
+    private func setupViewHierarchy() {
         view.backgroundColor = UIColor(red: 22.0/255.0, green: 180.0/255.0, blue: 198.0/255.0, alpha: 1)
 
         title1 = UILabel()
@@ -94,37 +140,10 @@ class ViewController: UIViewController {
 
 
        //MARK: - SecondView
-        secondView.backgroundColor = .white
-        secondView.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(secondView)
-        secondView.isHidden = true
-        
-        
-        textLabel = UILabel()
-        textLabel.translatesAutoresizingMaskIntoConstraints = false
-        textLabel.text = "Seu índice de Massa Corpórea é"
-        textLabel.textAlignment = .center
-        textLabel.textColor = UIColor(red: 10.0/255.0, green: 85.0/255.0, blue: 93.0/255.0, alpha: 1)
-        textLabel.font = UIFont.systemFont(ofSize: 20)
-        secondView.addSubview(textLabel)
-        
-        resultLabel = UILabel()
-        resultLabel.translatesAutoresizingMaskIntoConstraints = false
-        resultLabel.text = "Label"
-        resultLabel.textColor = UIColor(red: 10.0/255.0, green: 85.0/255.0, blue: 93.0/255.0, alpha: 1)
-        resultLabel.font = UIFont.boldSystemFont(ofSize: 35)
-        secondView.addSubview(resultLabel)
-        
-        resultImageView = UIImageView()
-        resultImageView.translatesAutoresizingMaskIntoConstraints = false
-        resultImageView.backgroundColor = UIColor(red: 136.0/255.0, green: 255.0/255.0, blue: 251.0/255.0, alpha: 1)
-        resultImageView.layer.cornerRadius = 10
-        resultImageView.contentMode = .scaleAspectFit
-        secondView.addSubview(resultImageView)
-        
-        
-        
-
+        self.view.addSubview(resultView)
+    }
+    
+    private func setupConstraints() {
         //MARK: - Constrains
         NSLayoutConstraint.activate([
             
@@ -155,111 +174,10 @@ class ViewController: UIViewController {
             calcButton.topAnchor.constraint(equalTo: alturaTextField.layoutMarginsGuide.bottomAnchor, constant: 40),
             calcButton.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor),
             
-            secondView.topAnchor.constraint(equalTo: calcButton.bottomAnchor, constant: 15),
-            secondView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            secondView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            secondView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-            textLabel.centerXAnchor.constraint(equalTo: secondView.centerXAnchor),
-            textLabel.topAnchor.constraint(equalTo: secondView.layoutMarginsGuide.topAnchor, constant: 15),
-            
-            resultLabel.centerXAnchor.constraint(equalTo: secondView.centerXAnchor),
-            resultLabel.topAnchor.constraint(equalTo: textLabel.layoutMarginsGuide.bottomAnchor, constant: 10),
-            
-            resultImageView.widthAnchor.constraint(equalToConstant: 350),
-            resultImageView.heightAnchor.constraint(equalToConstant: 350),
-            resultImageView.centerXAnchor.constraint(equalTo: secondView.centerXAnchor),
-            resultImageView.topAnchor.constraint(equalTo: resultLabel.layoutMarginsGuide.bottomAnchor, constant: 25)
-
+            resultView.topAnchor.constraint(equalTo: calcButton.bottomAnchor, constant: 15),
+            resultView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            resultView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            resultView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-    
-    
-    @objc func buttonAction(sender: UIButton!) {
-            let btnsendtag: UIButton = sender
-            if btnsendtag.tag == 1 {
-                if let altura = Double(alturaTextField.text!), let peso = Double(pesoTextField.text!) {
-                    imc = peso / (altura * altura)
-                    
-                    showResult()
-                }
-                dismiss(animated: true, completion: nil)
-                print("button clicked")
-            }
-        }
-    
-    func showResult() {
-        let roundImc = String(format: "%.1f", imc)
-        var result = ""
-        var image = ""
-        switch imc {
-            case 0..<16:
-                result = "\(roundImc) - Magreza"
-                image = "abaixo"
-            case 16..<18.5:
-                result = "\(roundImc) - Abaixo do peso"
-                image = "abaixo"
-            case 18.5..<25:
-                result = "\(roundImc) - Peso ideal"
-                image = "ideal"
-            case 25..<30:
-                result = "\(roundImc) - Sobrepeso"
-                image = "sobre"
-            default:
-                result = "\(roundImc) - Obesidade"
-                image = "obesidade"
-        }
-        resultLabel.text = result
-        resultImageView.image = UIImage(named: image)
-        secondView.isHidden = false
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        
-    }
-
 }
-
-
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-struct UIViewControllerPreview<ViewController: UIViewController>: UIViewControllerRepresentable {
-    let viewController: ViewController
-
-    init(_ builder: @escaping () -> ViewController) {
-        viewController = builder()
-    }
-
-    // MARK: - UIViewControllerRepresentable
-    func makeUIViewController(context: Context) -> ViewController {
-        viewController
-    }
-
-    func updateUIViewController(_ uiViewController: ViewController, context: UIViewControllerRepresentableContext<UIViewControllerPreview<ViewController>>) {
-        return
-    }
-}
-#endif
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-let deviceNames: [String] = [
-    "iPhone 11 Pro Max",
-]
-
-@available(iOS 13.0, *)
-struct ViewController_Preview: PreviewProvider {
-  static var previews: some View {
-    ForEach(deviceNames, id: \.self) { deviceName in
-      UIViewControllerPreview {
-        ViewController()
-      }.previewDevice(PreviewDevice(rawValue: deviceName))
-        .previewDisplayName(deviceName)
-    }
-  }
-}
-#endif
