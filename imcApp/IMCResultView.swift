@@ -12,7 +12,7 @@ final class IMCResultView: UIView {
     private lazy var textLabel: UILabel = {
         let textLabel = UILabel()
         textLabel.translatesAutoresizingMaskIntoConstraints = false
-        textLabel.text = "Seu índice de Massa Corpórea é"
+        textLabel.text = "Seu Índice de Massa Corporal é"
         textLabel.textAlignment = .center
         textLabel.textColor = UIColor(red: 10.0/255.0, green: 85.0/255.0, blue: 93.0/255.0, alpha: 1)
         textLabel.font = UIFont.systemFont(ofSize: 20)
